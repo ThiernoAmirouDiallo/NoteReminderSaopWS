@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://emiage2018s1.com/notes" xmlns:tns="http://emiage2018s1.com/notes"
+	elementFormDefault="qualified">
+
+	<xs:element name="GetNoteDetailsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetNoteDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NoteDetails" type="tns:NoteDetails" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetAllNoteDetailsRequest">
+		<xs:complexType>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetAllNoteDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NoteDetails" type="tns:NoteDetails"
+					maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DeleteNoteDetailsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DeleteNoteDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="status" type="tns:Status" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="Status">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SUCCESS" />
+			<xs:enumeration value="FAILURE" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="NoteDetails">
+		<xs:sequence>
+			<xs:element name="idSondage" type="xs:int" />
+			<xs:element name="texte" type="xs:string" />
+			<xs:element name="couleur" type="xs:string" />
+			<xs:element name="echeance" type="xs:string" />
+			<xs:element name="ordre" type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
