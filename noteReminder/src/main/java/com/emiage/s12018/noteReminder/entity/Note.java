@@ -47,6 +47,11 @@ public class Note {
 	public void setOrdre(long ordre) {
 		this.ordre = ordre;
 	}
+	@Override
+	public String toString() {
+		return "Note [idSondage=" + idSondage + ", texte=" + texte + ", couleur=" + couleur + ", echeance=" + echeance
+				+ ", ordre=" + ordre + "]";
+	}
 	
 	
 }

@@ -12,8 +12,13 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import com.emiage.s12018.noteReminder.entity.Note;
 import com.emiage.s12018.noteReminder.exception.NoteNotFoundException;
 import com.emiage.s12018.noteReminder.service.NoteRepository;
+import com.emiage2018s1.notes.AddNoteDetails;
+import com.emiage2018s1.notes.AddNoteDetailsRequest;
+import com.emiage2018s1.notes.AddNoteDetailsResponse;
 import com.emiage2018s1.notes.DeleteNoteDetailsRequest;
 import com.emiage2018s1.notes.DeleteNoteDetailsResponse;
+import com.emiage2018s1.notes.EditNoteDetailsRequest;
+import com.emiage2018s1.notes.EditNoteDetailsResponse;
 import com.emiage2018s1.notes.GetAllNoteDetailsRequest;
 import com.emiage2018s1.notes.GetAllNoteDetailsResponse;
 import com.emiage2018s1.notes.GetNoteDetailsRequest;
@@ -50,6 +55,18 @@ public class NoteDetailsEndpoint {
 		response.setNoteDetails(mapNote(note));
 		return response;
 	}
+	
+	private AddNoteDetailsResponse mapAddNoteDetails(Note note) {
+		AddNoteDetailsResponse response = new AddNoteDetailsResponse();
+		response.setNoteDetails(mapNote(note));
+		return response;
+	}
+	
+	private EditNoteDetailsResponse mapEditNoteDetails(Note note) {
+		EditNoteDetailsResponse response = new EditNoteDetailsResponse();
+		response.setNoteDetails(mapNote(note));
+		return response;
+	}
 
 	private GetAllNoteDetailsResponse mapAllNoteDetails(List<Note> notes) {
 		GetAllNoteDetailsResponse response = new GetAllNoteDetailsResponse();
@@ -72,6 +89,34 @@ public class NoteDetailsEndpoint {
 
 		noteDetails.setOrdre((int) note.getOrdre());
 		return noteDetails;
+	}
+	
+	private Note mapNote(NoteDetails noteDetails) {
+		Note note = new Note();
+
+		note.setIdSondage((long) noteDetails.getIdSondage());
+
+		note.setTexte(noteDetails.getTexte());
+		note.setCouleur(noteDetails.getCouleur());
+		note.setEcheance(noteDetails.getEcheance());
+		
+
+		note.setOrdre((int) noteDetails.getOrdre());
+		return note;
+	}
+	
+	private Note mapNote(AddNoteDetails noteDetails) {
+		Note note = new Note();
+
+		note.setIdSondage(null);
+
+		note.setTexte(noteDetails.getTexte());
+		note.setCouleur(noteDetails.getCouleur());
+		note.setEcheance(noteDetails.getEcheance());
+		
+
+		note.setOrdre((int) noteDetails.getOrdre());
+		return note;
 	}
 
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "GetAllNoteDetailsRequest")
@@ -100,6 +145,49 @@ public class NoteDetailsEndpoint {
 		response.setStatus(mapStatus(status));
 		return response;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddNoteDetailsRequest")
+	@ResponsePayload
+	public AddNoteDetailsResponse addNoteDetailsRequest(@RequestPayload AddNoteDetailsRequest request) {
+
+		Note noteInput = mapNote(request.getAddNoteDetails());
+		System.out.println("note ajoutée debut");
+		
+		service.save(noteInput);
+		
+		System.out.println("note ajoutée " + noteInput);
+ 		
+		return mapAddNoteDetails(noteInput);
+	}
+	
+	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "EditNoteDetailsRequest")
+	@ResponsePayload
+	public EditNoteDetailsResponse editNoteDetailsRequest(@RequestPayload EditNoteDetailsRequest request) {
+
+		Note noteInput = mapNote(request.getNoteDetails());
+		
+		Optional<Note> note = service.findById((long) noteInput.getIdSondage());
+		
+		if(note.isPresent()) {
+			service.save(noteInput);
+		}
+ 		
+		return mapEditNoteDetails(noteInput);
+	}
+	
+
+	
+	
+	
 
 	private com.emiage2018s1.notes.Status mapStatus(Status status) {
 		if (status == Status.FAILURE)

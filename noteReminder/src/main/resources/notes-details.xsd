@@ -33,6 +33,53 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	
+	
+	
+	
+	
+	
+	<xs:element name="AddNoteDetailsRequest">
+		<xs:complexType>
+		<xs:sequence>
+				<xs:element name="AddNoteDetails" type="tns:AddNoteDetails" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="AddNoteDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NoteDetails" type="tns:NoteDetails" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	
+	<xs:element name="EditNoteDetailsRequest">
+		<xs:complexType>
+		<xs:sequence>
+				<xs:element name="NoteDetails" type="tns:NoteDetails" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="EditNoteDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NoteDetails" type="tns:NoteDetails" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	<xs:element name="DeleteNoteDetailsRequest">
 		<xs:complexType>
@@ -60,6 +107,15 @@
 	<xs:complexType name="NoteDetails">
 		<xs:sequence>
 			<xs:element name="idSondage" type="xs:int" />
+			<xs:element name="texte" type="xs:string" />
+			<xs:element name="couleur" type="xs:string" />
+			<xs:element name="echeance" type="xs:string" />
+			<xs:element name="ordre" type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AddNoteDetails">
+		<xs:sequence>
 			<xs:element name="texte" type="xs:string" />
 			<xs:element name="couleur" type="xs:string" />
 			<xs:element name="echeance" type="xs:string" />

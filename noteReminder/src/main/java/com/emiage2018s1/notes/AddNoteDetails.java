@@ -15,16 +15,15 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for NoteDetails complex type.
+ * <p>Java class for AddNoteDetails complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="NoteDetails">
+ * &lt;complexType name="AddNoteDetails">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="idSondage" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="texte" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="couleur" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="echeance" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -38,16 +37,14 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "NoteDetails", propOrder = {
-    "idSondage",
+@XmlType(name = "AddNoteDetails", propOrder = {
     "texte",
     "couleur",
     "echeance",
     "ordre"
 })
-public class NoteDetails {
+public class AddNoteDetails {
 
-    protected int idSondage;
     @XmlElement(required = true)
     protected String texte;
     @XmlElement(required = true)
@@ -55,22 +52,6 @@ public class NoteDetails {
     @XmlElement(required = true)
     protected String echeance;
     protected int ordre;
-
-    /**
-     * Gets the value of the idSondage property.
-     * 
-     */
-    public int getIdSondage() {
-        return idSondage;
-    }
-
-    /**
-     * Sets the value of the idSondage property.
-     * 
-     */
-    public void setIdSondage(int value) {
-        this.idSondage = value;
-    }
 
     /**
      * Gets the value of the texte property.
