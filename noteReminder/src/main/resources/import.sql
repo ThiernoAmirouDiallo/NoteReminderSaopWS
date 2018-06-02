@@ -1,0 +1,3 @@
+insert into users(ID_USER,ACTIVED,DROIT,MATRICULE,USERNAME,PASSWORD) values(1,1,'','','diallo','$2a$10$cClkMekpRFN6eg3kFavRRO13xWWbIhfnFs/14/VJ7HWDo69zL0F/6');
+insert into users(ID_USER,ACTIVED,DROIT,MATRICULE,USERNAME,PASSWORD) values(2,1,'','','user','$2a$10$cClkMekpRFN6eg3kFavRRO13xWWbIhfnFs/14/VJ7HWDo69zL0F/6');
+insert into users(ID_USER,ACTIVED,DROIT,MATRICULE,USERNAME,PASSWORD) values(3,1,'','','admin','$2a$10$cClkMekpRFN6eg3kFavRRO13xWWbIhfnFs/14/VJ7HWDo69zL0F/6');

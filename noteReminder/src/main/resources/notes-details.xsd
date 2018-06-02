@@ -33,12 +33,7 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	
-	
-	
-	
-	
-	
+		
 	<xs:element name="AddNoteDetailsRequest">
 		<xs:complexType>
 		<xs:sequence>
@@ -72,15 +67,6 @@
 		</xs:complexType>
 	</xs:element>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	<xs:element name="DeleteNoteDetailsRequest">
 		<xs:complexType>
 			<xs:sequence>

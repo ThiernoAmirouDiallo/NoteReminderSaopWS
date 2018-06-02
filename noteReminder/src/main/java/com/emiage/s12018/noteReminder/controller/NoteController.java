@@ -27,13 +27,9 @@ public class NoteController {
 		note.setEcheance(new Date().toString());
 		note.setOrdre(1);
 		
-		
 		noteRepository.save(note);
-		
-		
+			
 		return note;
-		
-		
 	}
 	
 	@RequestMapping("/notes")

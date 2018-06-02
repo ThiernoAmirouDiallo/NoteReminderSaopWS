@@ -11,8 +11,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.server.EndpointInterceptor;
-//import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
-//import org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler;
+	import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
+import org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
@@ -54,7 +54,7 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 	
 
 	//XwsSecurityInterceptor
-	/*@Bean
+	@Bean
 	public XwsSecurityInterceptor securityInterceptor(){
 		XwsSecurityInterceptor securityInterceptor = new XwsSecurityInterceptor();
 		//Callback Handler -> SimplePasswordValidationCallbackHandler
@@ -78,6 +78,6 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 	public void addInterceptors(List<EndpointInterceptor> interceptors) {
 		interceptors.add(securityInterceptor());
 	}
-	*/
+	
 	
 }

@@ -145,16 +145,7 @@ public class NoteDetailsEndpoint {
 		response.setStatus(mapStatus(status));
 		return response;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddNoteDetailsRequest")
 	@ResponsePayload
 	public AddNoteDetailsResponse addNoteDetailsRequest(@RequestPayload AddNoteDetailsRequest request) {
@@ -184,11 +175,6 @@ public class NoteDetailsEndpoint {
 		return mapEditNoteDetails(noteInput);
 	}
 	
-
-	
-	
-	
-
 	private com.emiage2018s1.notes.Status mapStatus(Status status) {
 		if (status == Status.FAILURE)
 			return com.emiage2018s1.notes.Status.FAILURE;
