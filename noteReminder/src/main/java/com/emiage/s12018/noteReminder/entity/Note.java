@@ -3,25 +3,37 @@ package com.emiage.s12018.noteReminder.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Note {
 
 	@Id
 	@GeneratedValue
-	private Long idSondage;
+	private Long idNote;
 	
 	private String texte;
 	private String couleur;
 	private String echeance;
 	private long ordre;
-	public Long getIdSondage() {
-		return idSondage;
+	
+	//bi-directional many-to-one association to users
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="ID_USER", nullable=true)
+	//@JsonIgnore
+	private Users user;
+	
+	public Long getIdNote() {
+		return idNote;
 	}
-	public void setIdSondage(Long idSondage) {
-		this.idSondage = idSondage;
+	public void setIdNote(Long idNote) {
+		this.idNote = idNote;
 	}
 	public String getCouleur() {
 		return couleur;
@@ -47,11 +59,21 @@ public class Note {
 	public void setOrdre(long ordre) {
 		this.ordre = ordre;
 	}
+	
+	
+	public Users getUser() {
+		return user;
+	}
+	public void setUser(Users user) {
+		this.user = user;
+	}
 	@Override
 	public String toString() {
-		return "Note [idSondage=" + idSondage + ", texte=" + texte + ", couleur=" + couleur + ", echeance=" + echeance
-				+ ", ordre=" + ordre + "]";
+		return "Note [idNote=" + idNote + ", texte=" + texte + ", couleur=" + couleur + ", echeance=" + echeance
+				+ ", ordre=" + ordre + ", user=" + user + "]";
 	}
+	
+	
 	
 	
 }

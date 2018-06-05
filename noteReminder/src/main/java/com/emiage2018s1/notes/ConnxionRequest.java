@@ -10,7 +10,6 @@ package com.emiage2018s1.notes;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,9 +23,6 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="AddNoteDetails" type="{http://emiage2018s1.com/notes}AddNoteDetails"/>
- *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,37 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "addNoteDetails"
-})
-@XmlRootElement(name = "AddNoteDetailsRequest")
-public class AddNoteDetailsRequest {
+@XmlType(name = "")
+@XmlRootElement(name = "ConnxionRequest")
+public class ConnxionRequest {
 
-    @XmlElement(name = "AddNoteDetails", required = true)
-    protected AddNoteDetails addNoteDetails;
-
-    /**
-     * Gets the value of the addNoteDetails property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AddNoteDetails }
-     *     
-     */
-    public AddNoteDetails getAddNoteDetails() {
-        return addNoteDetails;
-    }
-
-    /**
-     * Sets the value of the addNoteDetails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AddNoteDetails }
-     *     
-     */
-    public void setAddNoteDetails(AddNoteDetails value) {
-        this.addNoteDetails = value;
-    }
 
 }

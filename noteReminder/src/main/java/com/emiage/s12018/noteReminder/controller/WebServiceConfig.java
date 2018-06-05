@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.server.EndpointInterceptor;
-	import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
+import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
 import org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler;
 import org.springframework.ws.soap.security.xwss.callback.SpringDigestPasswordValidationCallbackHandler;
 import org.springframework.ws.soap.security.xwss.callback.SpringPlainTextPasswordValidationCallbackHandler;

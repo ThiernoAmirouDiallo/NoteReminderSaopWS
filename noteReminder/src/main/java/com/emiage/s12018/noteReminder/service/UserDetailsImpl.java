@@ -2,13 +2,13 @@ package com.emiage.s12018.noteReminder.service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.emiage.s12018.noteReminder.entity.Role;
 import com.emiage.s12018.noteReminder.entity.Users;
 
 
@@ -29,13 +29,12 @@ public class UserDetailsImpl implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		
-			Set<Role> roles = user.getRoles();
-			for( Role role : roles ) {
-				authorities.add( new SimpleGrantedAuthority(role.getRole()) ); 
-			}
+		//pas de roles
+			//List<Role> roles = user.getRoles();
+			//for( Role role : roles ) {
+			//	authorities.add( new SimpleGrantedAuthority(role.getRole()) ); 
+			//}
 			return authorities;		
-		
-	
 	}
 
 	@Override

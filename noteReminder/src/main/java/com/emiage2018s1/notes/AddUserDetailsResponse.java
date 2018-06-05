@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="AddNoteDetails" type="{http://emiage2018s1.com/notes}AddNoteDetails"/>
+ *         &lt;element name="status" type="{http://emiage2018s1.com/notes}Status"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "addNoteDetails"
+    "status"
 })
-@XmlRootElement(name = "AddNoteDetailsRequest")
-public class AddNoteDetailsRequest {
+@XmlRootElement(name = "AddUserDetailsResponse")
+public class AddUserDetailsResponse {
 
-    @XmlElement(name = "AddNoteDetails", required = true)
-    protected AddNoteDetails addNoteDetails;
+    @XmlElement(required = true)
+    protected Status status;
 
     /**
-     * Gets the value of the addNoteDetails property.
+     * Gets the value of the status property.
      * 
      * @return
      *     possible object is
-     *     {@link AddNoteDetails }
+     *     {@link Status }
      *     
      */
-    public AddNoteDetails getAddNoteDetails() {
-        return addNoteDetails;
+    public Status getStatus() {
+        return status;
     }
 
     /**
-     * Sets the value of the addNoteDetails property.
+     * Sets the value of the status property.
      * 
      * @param value
      *     allowed object is
-     *     {@link AddNoteDetails }
+     *     {@link Status }
      *     
      */
-    public void setAddNoteDetails(AddNoteDetails value) {
-        this.addNoteDetails = value;
+    public void setStatus(Status value) {
+        this.status = value;
     }
 
 }

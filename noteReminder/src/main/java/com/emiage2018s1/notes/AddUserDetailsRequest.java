@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="AddNoteDetails" type="{http://emiage2018s1.com/notes}AddNoteDetails"/>
+ *         &lt;element name="UserDetails" type="{http://emiage2018s1.com/notes}UserDetails"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "addNoteDetails"
+    "userDetails"
 })
-@XmlRootElement(name = "AddNoteDetailsRequest")
-public class AddNoteDetailsRequest {
+@XmlRootElement(name = "AddUserDetailsRequest")
+public class AddUserDetailsRequest {
 
-    @XmlElement(name = "AddNoteDetails", required = true)
-    protected AddNoteDetails addNoteDetails;
+    @XmlElement(name = "UserDetails", required = true)
+    protected UserDetails userDetails;
 
     /**
-     * Gets the value of the addNoteDetails property.
+     * Gets the value of the userDetails property.
      * 
      * @return
      *     possible object is
-     *     {@link AddNoteDetails }
+     *     {@link UserDetails }
      *     
      */
-    public AddNoteDetails getAddNoteDetails() {
-        return addNoteDetails;
+    public UserDetails getUserDetails() {
+        return userDetails;
     }
 
     /**
-     * Sets the value of the addNoteDetails property.
+     * Sets the value of the userDetails property.
      * 
      * @param value
      *     allowed object is
-     *     {@link AddNoteDetails }
+     *     {@link UserDetails }
      *     
      */
-    public void setAddNoteDetails(AddNoteDetails value) {
-        this.addNoteDetails = value;
+    public void setUserDetails(UserDetails value) {
+        this.userDetails = value;
     }
 
 }

@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import com.emiage.s12018.noteReminder.dao.UserRepository;
 import com.emiage.s12018.noteReminder.entity.Note;
+import com.emiage.s12018.noteReminder.entity.Users;
 import com.emiage.s12018.noteReminder.exception.NoteNotFoundException;
 import com.emiage.s12018.noteReminder.service.NoteRepository;
 import com.emiage2018s1.notes.AddNoteDetails;
@@ -32,6 +35,9 @@ public class NoteDetailsEndpoint {
 	@Autowired
 	NoteRepository service;
 
+	@Autowired
+	UserRepository userRepository;
+
 	// method
 	// input - GetNoteDetailsRequest
 	// output - GetNoteDetailsResponse
@@ -44,8 +50,18 @@ public class NoteDetailsEndpoint {
 
 		Optional<Note> note = service.findById((long) request.getId());
 
+		//si la note n'existe pas
 		if (!note.isPresent())
-			throw new NoteNotFoundException("Invalid Note Id " + request.getId());
+			throw new NoteNotFoundException("Note non trouvée - Id " + request.getId());
+		else {
+			//vérification de l'appartenance de la note a l'utilisateur avant la suppression
+			Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
+			System.out.println(note.get());
+			//si la note n'appartient pas a l'utilisateur
+			if (note.get().getUser().getIdUser()!=user.getIdUser())
+				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + request.getId()	);
+		}
 
 		return mapNoteDetails(note.get());
 	}
@@ -80,7 +96,7 @@ public class NoteDetailsEndpoint {
 	private NoteDetails mapNote(Note note) {
 		NoteDetails noteDetails = new NoteDetails();
 
-		noteDetails.setIdSondage(note.getIdSondage().intValue());
+		noteDetails.setId(note.getIdNote().intValue());
 
 		noteDetails.setTexte(note.getTexte());
 		noteDetails.setCouleur(note.getCouleur());
@@ -94,7 +110,7 @@ public class NoteDetailsEndpoint {
 	private Note mapNote(NoteDetails noteDetails) {
 		Note note = new Note();
 
-		note.setIdSondage((long) noteDetails.getIdSondage());
+		note.setIdNote((long) noteDetails.getId());
 
 		note.setTexte(noteDetails.getTexte());
 		note.setCouleur(noteDetails.getCouleur());
@@ -108,7 +124,7 @@ public class NoteDetailsEndpoint {
 	private Note mapNote(AddNoteDetails noteDetails) {
 		Note note = new Note();
 
-		note.setIdSondage(null);
+		note.setIdNote(null);
 
 		note.setTexte(noteDetails.getTexte());
 		note.setCouleur(noteDetails.getCouleur());
@@ -124,8 +140,12 @@ public class NoteDetailsEndpoint {
 	public GetAllNoteDetailsResponse processAllNoteDetailsRequest(
 			@RequestPayload GetAllNoteDetailsRequest request) {
 
-		List<Note> notes = service.findAll();
-
+		
+		//System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
+		//recuperation des notes de l'utilisateur connecté
+		Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<Note> notes = service.findByUserIdUser(user.getIdUser());
+		
 		return mapAllNoteDetails(notes);
 	}
 
@@ -136,7 +156,18 @@ public class NoteDetailsEndpoint {
 		Status status = Status.FAILURE;
 		Optional<Note> note = service.findById((long) request.getId());
 		
-		if(note.isPresent()) {
+		//si la note n'existe pas
+		if (!note.isPresent())
+			throw new NoteNotFoundException("Note non trouvée - Id " + request.getId());
+		else {
+			//vérification de l'appartenance de la note a l'utilisateur avant la suppression
+			Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
+			System.out.println(note.get());
+			//si la note n'appartient pas a l'utilisateur
+			if (note.get().getUser().getIdUser()!=user.getIdUser())
+				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + request.getId());
+		
 			service.deleteById((long) request.getId());
 			status = Status.SUCCESS;
 		}
@@ -149,13 +180,15 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddNoteDetailsRequest")
 	@ResponsePayload
 	public AddNoteDetailsResponse addNoteDetailsRequest(@RequestPayload AddNoteDetailsRequest request) {
-
+		Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		Note noteInput = mapNote(request.getAddNoteDetails());
-		System.out.println("note ajoutée debut");
+		
+		noteInput.setUser(user);
+		//System.out.println("note ajoutée debut");
 		
 		service.save(noteInput);
 		
-		System.out.println("note ajoutée " + noteInput);
+		//System.out.println("note ajoutée " + noteInput);
  		
 		return mapAddNoteDetails(noteInput);
 	}
@@ -166,9 +199,19 @@ public class NoteDetailsEndpoint {
 
 		Note noteInput = mapNote(request.getNoteDetails());
 		
-		Optional<Note> note = service.findById((long) noteInput.getIdSondage());
+		Optional<Note> note = service.findById((long) noteInput.getIdNote());
 		
-		if(note.isPresent()) {
+		if (!note.isPresent())
+			throw new NoteNotFoundException("Note non trouvée - Id " + noteInput.getIdNote());
+		else {
+			//vérification de l'appartenance de la note a l'utilisateur avant la suppression
+			Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
+			System.out.println(note.get());
+			//si la note n'appartient pas a l'utilisateur
+			if (note.get().getUser().getIdUser()!=user.getIdUser())
+				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + noteInput.getIdNote()	);
+		
 			service.save(noteInput);
 		}
  		

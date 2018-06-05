@@ -1,11 +1,9 @@
 package com.emiage.s12018.noteReminder.entity;
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import java.util.List;
 
-import java.util.Collection;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,12 +31,12 @@ public class Users implements Serializable {
 	private String password;
 	private String droit;
 	private String matricule;
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name="USERS_ROLES")
-	private Set<Role> roles = new HashSet<Role>();
+	
+	//bi-directional many-to-one association to Note
+	//@OneToMany(mappedBy="user")
+	//private List<Note> notes;
 	
 	private boolean actived;
-	
 	
 	public Long getIdUser() {
 		return idUser;
@@ -71,16 +69,9 @@ public class Users implements Serializable {
 		this.password = password;
 	}
 
-	
-	
-	public Set<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
 	public Users() {
 		super();
+		//this.notes = new ArrayList<Note>();
 	}
 	public String getDroit() {
 		return droit;
@@ -89,7 +80,18 @@ public class Users implements Serializable {
 		this.droit = droit;
 	}
 	
-	
+	/*public List<Note> getNotes() {
+		return this.notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes =  notes;
+	}*/
+	@Override
+	public String toString() {
+		return "Users [idUser=" + idUser + ", username=" + username + ", password=" + password + ", droit=" + droit
+				+ ", matricule=" + matricule + ", notes=" + "notes" + ", actived=" + actived + "]";
+	}
 	
 	
 }
