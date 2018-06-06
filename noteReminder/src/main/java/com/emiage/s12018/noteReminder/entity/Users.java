@@ -29,32 +29,12 @@ public class Users implements Serializable {
 	
 	private String  username;
 	private String password;
-	private String droit;
-	private String matricule;
-	
-	//bi-directional many-to-one association to Note
-	//@OneToMany(mappedBy="user")
-	//private List<Note> notes;
-	
-	private boolean actived;
 	
 	public Long getIdUser() {
 		return idUser;
 	}
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
-	}
-	public String getMatricule() {
-		return matricule;
-	}
-	public void setMatricule(String matricule) {
-		this.matricule = matricule;
-	}
-	public boolean getActived() {
-		return actived;
-	}
-	public void setActived(boolean actived) {
-		this.actived = actived;
 	}
 	public String getUsername() {
 		return username;
@@ -71,27 +51,11 @@ public class Users implements Serializable {
 
 	public Users() {
 		super();
-		//this.notes = new ArrayList<Note>();
 	}
-	public String getDroit() {
-		return droit;
-	}
-	public void setDroit(String droit) {
-		this.droit = droit;
-	}
-	
-	/*public List<Note> getNotes() {
-		return this.notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes =  notes;
-	}*/
 	@Override
 	public String toString() {
-		return "Users [idUser=" + idUser + ", username=" + username + ", password=" + password + ", droit=" + droit
-				+ ", matricule=" + matricule + ", notes=" + "notes" + ", actived=" + actived + "]";
+		return "Users [idUser=" + idUser + ", username=" + username + ", password=" + password 
+				+ "]";
 	}
-	
 	
 }

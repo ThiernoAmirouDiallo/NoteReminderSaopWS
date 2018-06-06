@@ -1,4 +1,4 @@
-package com.emiage.s12018.noteReminder.controller;
+package com.emiage.s12018.noteReminder.config;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.emiage.s12018.noteReminder.config;
+package com.emiage.s12018.noteReminder.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +12,13 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import com.emiage.s12018.noteReminder.dao.UserRepository;
 import com.emiage.s12018.noteReminder.entity.Note;
 import com.emiage.s12018.noteReminder.entity.Users;
 import com.emiage.s12018.noteReminder.exception.ActionNotAuthorizedException;
 import com.emiage.s12018.noteReminder.exception.NoteNotFoundException;
 import com.emiage.s12018.noteReminder.exception.UserNameUnavailableException;
 import com.emiage.s12018.noteReminder.service.NoteRepository;
+import com.emiage.s12018.noteReminder.service.UserRepository;
 import com.emiage2018s1.notes.AddNoteDetails;
 import com.emiage2018s1.notes.AddNoteDetailsRequest;
 import com.emiage2018s1.notes.AddNoteDetailsResponse;
@@ -81,9 +81,9 @@ public class NoteDetailsEndpoint {
 
 	private void verifieDroit(String username, boolean estGestionDesNotes) {
 		if(username.equals("adduser") && estGestionDesNotes)
-			throw new ActionNotAuthorizedException("Le user :" +username + " ne peut pas avoir accès aux notes"	);
+			throw new ActionNotAuthorizedException("Le user '" +username + "' ne peut pas avoir accès aux notes"	);
 		else if(!username.equals("adduser") && !estGestionDesNotes)
-			throw new ActionNotAuthorizedException("Le user :" +username + " ne peut pas ajouter des utilisateur"	);
+			throw new ActionNotAuthorizedException("Le user '" +username + "' ne peut pas ajouter des utilisateur"	);
 	}
 
 	private GetNoteDetailsResponse mapNoteDetails(Note note) {
@@ -227,9 +227,6 @@ public class NoteDetailsEndpoint {
 		
 	private Users mapUser(UserDetails userDetails) {
 		Users user = new Users();
-		user.setActived(true);
-		user.setMatricule("");
-		user.setMatricule("");
 		user.setUsername(userDetails.getUsername());
 		user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 		

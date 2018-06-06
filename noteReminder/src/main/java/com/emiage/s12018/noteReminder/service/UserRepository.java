@@ -1,4 +1,4 @@
-package com.emiage.s12018.noteReminder.dao;
+package com.emiage.s12018.noteReminder.service;
 
 import java.util.Optional;
 

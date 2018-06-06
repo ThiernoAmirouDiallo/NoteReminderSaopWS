@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.emiage.s12018.noteReminder.dao.UserRepository;
 import com.emiage.s12018.noteReminder.entity.Users;
 
 
