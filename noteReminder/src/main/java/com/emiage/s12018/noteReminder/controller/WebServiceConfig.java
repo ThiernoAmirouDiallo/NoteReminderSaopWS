@@ -55,7 +55,7 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 	@Bean(name = "notes")
 	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema notesSchema) {
 		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
-		definition.setPortTypeName("CoursePort");
+		definition.setPortTypeName("NotePort");
 		definition.setTargetNamespace("http://emiage2018s1.com/notes");
 		definition.setLocationUri("/ws");
 		definition.setSchema(notesSchema);

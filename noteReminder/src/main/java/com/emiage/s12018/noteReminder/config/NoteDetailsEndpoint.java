@@ -57,7 +57,10 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "GetNoteDetailsRequest")
 	@ResponsePayload
 	public GetNoteDetailsResponse processNoteDetailsRequest(@RequestPayload GetNoteDetailsRequest request) {
-
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+		verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),true);
+		
+		
 		Optional<Note> note = noteService.findById((long) request.getId());
 
 		//si la note n'existe pas
@@ -74,6 +77,13 @@ public class NoteDetailsEndpoint {
 		}
 
 		return mapNoteDetails(note.get());
+	}
+
+	private void verifieDroit(String username, boolean estGestionDesNotes) {
+		if(username.equals("adduser") && estGestionDesNotes)
+			throw new ActionNotAuthorizedException("Le user :" +username + " ne peut pas avoir accès aux notes"	);
+		else if(!username.equals("adduser") && !estGestionDesNotes)
+			throw new ActionNotAuthorizedException("Le user :" +username + " ne peut pas ajouter des utilisateur"	);
 	}
 
 	private GetNoteDetailsResponse mapNoteDetails(Note note) {
@@ -150,11 +160,13 @@ public class NoteDetailsEndpoint {
 	public GetAllNoteDetailsResponse processAllNoteDetailsRequest(
 			@RequestPayload GetAllNoteDetailsRequest request) {
 
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+				verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),true);
 		
 		//System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
 		//recuperation des notes de l'utilisateur connecté
 		Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		List<Note> notes = noteService.findByUserIdUser(user.getIdUser());
+		List<Note> notes = noteService.findByUserIdUserOrderByOrdre(user.getIdUser());
 		
 		return mapAllNoteDetails(notes);
 	}
@@ -162,6 +174,8 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "DeleteNoteDetailsRequest")
 	@ResponsePayload
 	public DeleteNoteDetailsResponse deleteNoteDetailsRequest(@RequestPayload DeleteNoteDetailsRequest request) {
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+		verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),true);		
 
 		Status status = Status.FAILURE;
 		Optional<Note> note = noteService.findById((long) request.getId());
@@ -190,6 +204,9 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddUserDetailsRequest")
 	@ResponsePayload
 	public AddUserDetailsResponse addUserDetailsRequest(@RequestPayload AddUserDetailsRequest request) {
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+		verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),false);
+				
 		Status status = Status.FAILURE;
 		Users userInput = mapUser(request.getUserDetails());
 		
@@ -222,6 +239,9 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddNoteDetailsRequest")
 	@ResponsePayload
 	public AddNoteDetailsResponse addNoteDetailsRequest(@RequestPayload AddNoteDetailsRequest request) {
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+		verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),true);
+				
 		Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		Note noteInput = mapNote(request.getAddNoteDetails());
 		
@@ -238,6 +258,8 @@ public class NoteDetailsEndpoint {
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "EditNoteDetailsRequest")
 	@ResponsePayload
 	public EditNoteDetailsResponse editNoteDetailsRequest(@RequestPayload EditNoteDetailsRequest request) {
+		//vérification que le user a le droit (adduser ne doit que ajouter des utilisateurs et les les autres ne peuvent pas)
+		verifieDroit(SecurityContextHolder.getContext().getAuthentication().getName(),true);
 
 		Note noteInput = mapNote(request.getNoteDetails());
 		
