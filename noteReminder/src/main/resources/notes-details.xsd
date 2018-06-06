@@ -104,18 +104,6 @@
 	</xs:element>
 	
 	
-	<xs:element name="ConnxionRequest">
-		<xs:complexType>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="ConnexionResponse">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="status" type="tns:Status" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
 	
 	
 	

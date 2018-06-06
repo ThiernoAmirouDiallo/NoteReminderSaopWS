@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -13,11 +15,15 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import com.emiage.s12018.noteReminder.dao.UserRepository;
 import com.emiage.s12018.noteReminder.entity.Note;
 import com.emiage.s12018.noteReminder.entity.Users;
+import com.emiage.s12018.noteReminder.exception.ActionNotAuthorizedException;
 import com.emiage.s12018.noteReminder.exception.NoteNotFoundException;
+import com.emiage.s12018.noteReminder.exception.UserNameUnavailableException;
 import com.emiage.s12018.noteReminder.service.NoteRepository;
 import com.emiage2018s1.notes.AddNoteDetails;
 import com.emiage2018s1.notes.AddNoteDetailsRequest;
 import com.emiage2018s1.notes.AddNoteDetailsResponse;
+import com.emiage2018s1.notes.AddUserDetailsRequest;
+import com.emiage2018s1.notes.AddUserDetailsResponse;
 import com.emiage2018s1.notes.DeleteNoteDetailsRequest;
 import com.emiage2018s1.notes.DeleteNoteDetailsResponse;
 import com.emiage2018s1.notes.EditNoteDetailsRequest;
@@ -28,12 +34,16 @@ import com.emiage2018s1.notes.GetNoteDetailsRequest;
 import com.emiage2018s1.notes.GetNoteDetailsResponse;
 import com.emiage2018s1.notes.NoteDetails;
 import com.emiage2018s1.notes.Status;
+import com.emiage2018s1.notes.UserDetails;
 
 @Endpoint
 public class NoteDetailsEndpoint {
 
 	@Autowired
-	NoteRepository service;
+    public PasswordEncoder passwordEncoder;
+    
+	@Autowired
+	NoteRepository noteService;
 
 	@Autowired
 	UserRepository userRepository;
@@ -48,7 +58,7 @@ public class NoteDetailsEndpoint {
 	@ResponsePayload
 	public GetNoteDetailsResponse processNoteDetailsRequest(@RequestPayload GetNoteDetailsRequest request) {
 
-		Optional<Note> note = service.findById((long) request.getId());
+		Optional<Note> note = noteService.findById((long) request.getId());
 
 		//si la note n'existe pas
 		if (!note.isPresent())
@@ -60,7 +70,7 @@ public class NoteDetailsEndpoint {
 			System.out.println(note.get());
 			//si la note n'appartient pas a l'utilisateur
 			if (note.get().getUser().getIdUser()!=user.getIdUser())
-				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + request.getId()	);
+				throw new ActionNotAuthorizedException("Vous n'avez pas accès à cette note - Id " + request.getId()	);
 		}
 
 		return mapNoteDetails(note.get());
@@ -144,7 +154,7 @@ public class NoteDetailsEndpoint {
 		//System.out.println(SecurityContextHolder.getContext().getAuthentication().getName()+" => "+user);
 		//recuperation des notes de l'utilisateur connecté
 		Users user= userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		List<Note> notes = service.findByUserIdUser(user.getIdUser());
+		List<Note> notes = noteService.findByUserIdUser(user.getIdUser());
 		
 		return mapAllNoteDetails(notes);
 	}
@@ -154,7 +164,7 @@ public class NoteDetailsEndpoint {
 	public DeleteNoteDetailsResponse deleteNoteDetailsRequest(@RequestPayload DeleteNoteDetailsRequest request) {
 
 		Status status = Status.FAILURE;
-		Optional<Note> note = service.findById((long) request.getId());
+		Optional<Note> note = noteService.findById((long) request.getId());
 		
 		//si la note n'existe pas
 		if (!note.isPresent())
@@ -166,9 +176,9 @@ public class NoteDetailsEndpoint {
 			System.out.println(note.get());
 			//si la note n'appartient pas a l'utilisateur
 			if (note.get().getUser().getIdUser()!=user.getIdUser())
-				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + request.getId());
+				throw new ActionNotAuthorizedException("Vous n'avez pas accès à cette note - Id " + request.getId());
 		
-			service.deleteById((long) request.getId());
+			noteService.deleteById((long) request.getId());
 			status = Status.SUCCESS;
 		}
  		
@@ -176,7 +186,39 @@ public class NoteDetailsEndpoint {
 		response.setStatus(mapStatus(status));
 		return response;
 	}
+	
+	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddUserDetailsRequest")
+	@ResponsePayload
+	public AddUserDetailsResponse addUserDetailsRequest(@RequestPayload AddUserDetailsRequest request) {
+		Status status = Status.FAILURE;
+		Users userInput = mapUser(request.getUserDetails());
 		
+		//vérification de l'unicité du user name
+		Users user = userRepository.findByUsername(userInput.getUsername());
+		if (user != null) 
+			throw new UserNameUnavailableException("Ce nom d'utilisateur est déja utilisé - Username " + userInput.getUsername());
+		
+		userRepository.save(userInput);
+		
+		//Succès ajout
+		status = Status.SUCCESS;
+		
+		AddUserDetailsResponse response = new AddUserDetailsResponse();
+		response.setStatus(mapStatus(status));
+		return response;
+	}
+		
+	private Users mapUser(UserDetails userDetails) {
+		Users user = new Users();
+		user.setActived(true);
+		user.setMatricule("");
+		user.setMatricule("");
+		user.setUsername(userDetails.getUsername());
+		user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+		
+		return user;
+	}
+
 	@PayloadRoot(namespace = "http://emiage2018s1.com/notes", localPart = "AddNoteDetailsRequest")
 	@ResponsePayload
 	public AddNoteDetailsResponse addNoteDetailsRequest(@RequestPayload AddNoteDetailsRequest request) {
@@ -186,7 +228,7 @@ public class NoteDetailsEndpoint {
 		noteInput.setUser(user);
 		//System.out.println("note ajoutée debut");
 		
-		service.save(noteInput);
+		noteService.save(noteInput);
 		
 		//System.out.println("note ajoutée " + noteInput);
  		
@@ -199,7 +241,7 @@ public class NoteDetailsEndpoint {
 
 		Note noteInput = mapNote(request.getNoteDetails());
 		
-		Optional<Note> note = service.findById((long) noteInput.getIdNote());
+		Optional<Note> note = noteService.findById((long) noteInput.getIdNote());
 		
 		if (!note.isPresent())
 			throw new NoteNotFoundException("Note non trouvée - Id " + noteInput.getIdNote());
@@ -210,9 +252,9 @@ public class NoteDetailsEndpoint {
 			System.out.println(note.get());
 			//si la note n'appartient pas a l'utilisateur
 			if (note.get().getUser().getIdUser()!=user.getIdUser())
-				throw new NoteNotFoundException("Vous n'avez pas accès à cette note - Id " + noteInput.getIdNote()	);
+				throw new ActionNotAuthorizedException("Vous n'avez pas accès à cette note - Id " + noteInput.getIdNote()	);
 		
-			service.save(noteInput);
+			noteService.save(noteInput);
 		}
  		
 		return mapEditNoteDetails(noteInput);
