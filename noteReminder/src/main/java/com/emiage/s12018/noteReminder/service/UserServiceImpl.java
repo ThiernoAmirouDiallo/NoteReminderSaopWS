@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.emiage.s12018.noteReminder.entity.Users;
 
-
-
-
+//utile pour dire a spring comment recuperer les information d'un utilisateur a partir de son username
+//ici, on passe le user repository
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 

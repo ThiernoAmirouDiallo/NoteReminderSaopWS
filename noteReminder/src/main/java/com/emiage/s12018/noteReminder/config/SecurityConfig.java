@@ -23,85 +23,37 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 
-	
+	//autrorisation des urls non authentifiées par spring security
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf().disable()
 			.authorizeRequests()
+			//la securité du web service est delegué a soap ws configuré dans la classe WebServiceConfig.java
 			.antMatchers("/ws/**").permitAll()
-			.antMatchers("/notes/**").permitAll()
+			//accès libre a la console de la base de données H2
 			.antMatchers("/h2-console/**").permitAll()
-			.antMatchers("/tests/**").permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
-				.and()
-			.formLogin()
-				.loginPage("/login")
-				.usernameParameter("username")
-				//.usernameParameter("password")
-				.permitAll()
-				.and()
-			.logout()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login?logout")
-				.permitAll();
+			;
 		
 
         http.csrf().disable();
-        http.headers().frameOptions().disable();
-        //http.authenticationProvider(authenticationProvider());
-        
-        
-        /*authenticationManager = new AuthenticationManager() {           
-            @Override
-            public Authentication authenticate(Authentication authentication)
-                    throws AuthenticationException {
-                return builder.getOrBuild().authenticate(authentication);
-            }
-        };
-        */
-        
+        http.headers().frameOptions().disable();    
 	}
-	
-	@Autowired
-    private AuthenticationManagerBuilder builder;
 
-
+	//bean de cryptage du mot de passe de type bcryp (salt generé automatiquement)
 	@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 	
-	//local auth
+	//service de recuperation des info utilisateur
 	@Autowired
 	private UserDetailsService userService;
 	
+	//parametrage de l'authentification spring securité sur la quelle va resposer l'authentification soap ws security
 	@Autowired
 	public void configureAuth(AuthenticationManagerBuilder auth) throws Exception{
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
-		
-		//auth.authenticationProvider(authenticationProvider());
 	}
-	
-	
-
-	/*
-	 @Bean(BeanIds.AUTHENTICATION_MANAGER)
-	    @Override
-	    public AuthenticationManager authenticationManagerBean() throws Exception {
-	        return super.authenticationManagerBean();
-	    }
-	    */
-	
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-	    DaoAuthenticationProvider authProvider
-	      = new DaoAuthenticationProvider();
-	    authProvider.setUserDetailsService(userService);
-	    authProvider.setPasswordEncoder(passwordEncoder());
-	    return authProvider;
-	}
-	
-	
 }

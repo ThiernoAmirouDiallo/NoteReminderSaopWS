@@ -3,6 +3,7 @@ package com.emiage.s12018.noteReminder.exception;
 import org.springframework.ws.soap.server.endpoint.annotation.FaultCode;
 import org.springframework.ws.soap.server.endpoint.annotation.SoapFault;
 
+//exception levée si une note n'existe pas
 @SoapFault(faultCode = FaultCode.CUSTOM, customFaultCode = "{http://emiage2018s1.com/courses}001_NOTE_NOT_FOUND")
 public class NoteNotFoundException extends RuntimeException {
 

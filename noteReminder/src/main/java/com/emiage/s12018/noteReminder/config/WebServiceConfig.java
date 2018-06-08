@@ -42,6 +42,7 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 
 	private static final Logger log = LoggerFactory.getLogger(WebServiceConfig.class);
 
+	//configuration du servlet en charge des requetes venant sur le web service
 	@Bean
 	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext context) {
 		MessageDispatcherServlet messageDispatcherServlet = new MessageDispatcherServlet();
@@ -50,6 +51,7 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 		return new ServletRegistrationBean(messageDispatcherServlet, "/ws/*");
 	}
 
+	//parametrage du webservice, name space, endpoint, url WSDL
 	// /ws/notes.wsdl
 	// course-details.xsd
 	@Bean(name = "notes")
@@ -62,13 +64,14 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 		return definition;
 	}
 
+	//on donne la sture des objets: utile pour la generation du WSDL
 	@Bean
 	public XsdSchema notesSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("notes-details.xsd"));
 	}
 	
-
-	//XwsSecurityInterceptor
+ 
+	//XwsSecurityInterceptor interception pour authentification des requetes ou rejets
 	@Bean
 	public XwsSecurityInterceptor securityInterceptor(){
 		XwsSecurityInterceptor securityInterceptor = new XwsSecurityInterceptor();
@@ -78,11 +81,14 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 		securityInterceptor.setCallbackHandler(springPlainTextPasswordValidationCallbackHandler());
 		//securityInterceptor.setCallbackHandler(digestSpringCallbackHandler());
 		
+		//parametre de securite : type de mot de passe
 		//Security Policy -> securityPolicy.xml
 		securityInterceptor.setPolicyConfiguration(new ClassPathResource("securityPolicy.xml"));
 		return securityInterceptor;
 	}
 	
+	//dans le cas de l'utiliation d'un user et mot de passe simple: in merory dans le dictionnaire
+	//(non utilisé dans ce projet)
 	@Bean
 	public SimplePasswordValidationCallbackHandler callbackHandler() {
 		SimplePasswordValidationCallbackHandler handler = new SimplePasswordValidationCallbackHandler();
@@ -90,12 +96,14 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 		return handler;
 	}
 	
+	//dans le cas de l'utiliation d'un digest user token (non utilisé dans ce projet)
 	@Bean
 	public SpringDigestPasswordValidationCallbackHandler digestSpringCallbackHandler() {
 		SpringDigestPasswordValidationCallbackHandler handler = new SpringDigestPasswordValidationCallbackHandler();
 		handler.setUserDetailsService(userService);
 		return handler;
 	}
+	
 	
 	
 	// @Bean
@@ -109,8 +117,14 @@ public class WebServiceConfig extends WsConfigurerAdapter{
         return callbackHandler;
     }
 	
+    //on inject le builder qui va servire a construire l'authentification manage a donné a l'intercepteur de la securité 
+    //pour authentifier les requetes
     @Autowired
     private AuthenticationManagerBuilder builder;
+    
+    //utile si on veut passer par une authentification digest password
+    @Autowired
+	private UserDetailsService userService;
 
 	//@Autowired
     //private AuthenticationManager authenticationManager;
@@ -121,15 +135,12 @@ public class WebServiceConfig extends WsConfigurerAdapter{
             return builder.getOrBuild().authenticate(authentication);
         }
     };
-    @Autowired
-	private UserDetailsService userService;
-		
+    
 
+    //on ajoute l'intercepteur configuré
 	//Interceptors.add -> XwsSecurityInterceptor
 	@Override
 	public void addInterceptors(List<EndpointInterceptor> interceptors) {
 		interceptors.add(securityInterceptor());
 	}
-	
-	
 }

@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+//classe Note liée a la table NOTE
 @Entity
 public class Note {
 
@@ -26,7 +27,6 @@ public class Note {
 	//bi-directional many-to-one association to users
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="ID_USER", nullable=true)
-	//@JsonIgnore
 	private Users user;
 	
 	public Long getIdNote() {
@@ -71,9 +71,5 @@ public class Note {
 	public String toString() {
 		return "Note [idNote=" + idNote + ", texte=" + texte + ", couleur=" + couleur + ", echeance=" + echeance
 				+ ", ordre=" + ordre + ", user=" + user + "]";
-	}
-	
-	
-	
-	
+	}	
 }

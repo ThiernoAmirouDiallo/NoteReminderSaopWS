@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+//classe users liée a la tables users
 @Entity
 @Table( name="users" )
 public class Users implements Serializable {

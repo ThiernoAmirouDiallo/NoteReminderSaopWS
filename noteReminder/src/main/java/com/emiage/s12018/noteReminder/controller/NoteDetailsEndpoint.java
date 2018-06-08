@@ -79,6 +79,7 @@ public class NoteDetailsEndpoint {
 		return mapNoteDetails(note.get());
 	}
 
+	//on verifie si le user connecté a droit de faire ce qu'il veut
 	private void verifieDroit(String username, boolean estGestionDesNotes) {
 		if(username.equals("adduser") && estGestionDesNotes)
 			throw new ActionNotAuthorizedException("Le user '" +username + "' ne peut pas avoir accès aux notes"	);
