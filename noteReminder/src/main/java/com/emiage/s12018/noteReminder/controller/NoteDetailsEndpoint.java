@@ -273,6 +273,8 @@ public class NoteDetailsEndpoint {
 			if (note.get().getUser().getIdUser()!=user.getIdUser())
 				throw new ActionNotAuthorizedException("Vous n'avez pas accès à cette note - Id " + noteInput.getIdNote()	);
 		
+			//affectation du user
+			noteInput.setUser(user);
 			noteService.save(noteInput);
 		}
  		
